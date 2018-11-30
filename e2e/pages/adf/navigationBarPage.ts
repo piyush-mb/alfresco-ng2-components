@@ -40,6 +40,7 @@ export class NavigationBarPage {
     headerDataButton = element(by.css('a[data-automation-id="Header Data"]'));
     menuButton = element(by.css('button[data-automation-id="adf-menu-icon"]'));
     formButton = element(by.css('a[data-automation-id="Form"]'));
+    processListButton = element(by.css('a[data-automation-id="Process List"]'));
 
     clickContentServicesButton() {
         Util.waitUntilElementIsVisible(this.contentServicesButton);
@@ -174,4 +175,9 @@ export class NavigationBarPage {
     checkContentServicesButtonIsDisplayed() {
         Util.waitUntilElementIsVisible(this.contentServicesButton);
     }
+
+    clickProcessListButton = function () {
+        Util.waitUntilElementIsVisible(this.processListButton);
+        return this.processListButton.click();
+    };
 }
