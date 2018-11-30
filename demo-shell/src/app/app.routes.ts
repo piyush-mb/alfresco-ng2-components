@@ -44,7 +44,7 @@ import { CloudComponent } from './components/cloud/cloud.component';
 import { TaskListCloudDemoComponent } from './components/task-list-cloud-demo/task-list-cloud-demo.component';
 import { ProcessListCloudExampleComponent } from './components/cloud/process-list-cloud-example.component';
 import { TreeViewSampleComponent } from './components/tree-view/tree-view-sample.component';
-import { DocumentListComponent } from './components/document-list/document-list.component';
+import { DocumentListDemoComponent } from './components/document-list/document-list-demo.component';
 
 export const appRoutes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -320,7 +320,7 @@ export const appRoutes: Routes = [
             },
             {
                 path: 'document-list',
-                component: DocumentListComponent
+                component: DocumentListDemoComponent
             },
             {
                 path: 'error/:id',
