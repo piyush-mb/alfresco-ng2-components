@@ -17,7 +17,7 @@
 
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { UserPreferencesService } from '@alfresco/adf-core';
-import { ProcessListCloudComponent } from '@alfresco/adf-process-services-cloud';
+import { ProcessListCloudComponent, ProcessFilterRepresentationModel, ProcessQueryModel } from '@alfresco/adf-process-services-cloud';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -41,6 +41,10 @@ export class ProcessListCloudExampleComponent implements OnInit {
     sortArray: any[];
     sortField: string;
     sortDirection: string;
+
+    editedQuery: ProcessQueryModel;
+
+    currentFilter: ProcessFilterRepresentationModel;
 
     columns = [
         {key: 'id', label: 'ID'},
@@ -102,5 +106,6 @@ export class ProcessListCloudExampleComponent implements OnInit {
         this.filterName = filter.name;
         this.sortDirectionFormControl.setValue(this.sortDirection);
         this.sortFormControl.setValue(this.sort);
+        this.currentFilter = new ProcessFilterRepresentationModel(filter);
     }
 }
