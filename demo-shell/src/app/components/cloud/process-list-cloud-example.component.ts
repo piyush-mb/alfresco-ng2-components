@@ -17,8 +17,14 @@
 
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { UserPreferencesService } from '@alfresco/adf-core';
-import { ProcessListCloudComponent, ProcessFilterRepresentationModel, ProcessQueryModel } from '@alfresco/adf-process-services-cloud';
-import { FormControl } from '@angular/forms';
+import {
+    ProcessListCloudComponent,
+    ProcessFilterRepresentationModel,
+    ProcessQueryModel,
+    EditProcessFilterCloudComponent,
+    ProcessListCloudSortingModel,
+    ProcessFiltersCloudComponent
+} from '@alfresco/adf-process-services-cloud';
 
 @Component({
     selector: 'app-process-list-example',
@@ -30,58 +36,23 @@ export class ProcessListCloudExampleComponent implements OnInit {
     @ViewChild('processCloud')
     processCloud: ProcessListCloudComponent;
 
-    sortFormControl: FormControl;
-    sortDirectionFormControl: FormControl;
+    @ViewChild('processFiltersCloud')
+    processFiltersCloud: ProcessFiltersCloudComponent;
 
     currentAppName: string = '';
-    filterName: string = '';
-    status: string = '';
-    filterId: string = '';
-    sort: string = '';
+
     sortArray: any[];
-    sortField: string;
+
     sortDirection: string;
 
     editedQuery: ProcessQueryModel;
 
     currentFilter: ProcessFilterRepresentationModel;
 
-    columns = [
-        {key: 'id', label: 'ID'},
-        {key: 'name', label: 'NAME'},
-        {key: 'status', label: 'STATUS'},
-        {key: 'startDate', label: 'START DATE'}
-      ];
-
     constructor(private userPreference: UserPreferencesService) {
     }
 
-    ngOnInit() {
-        this.sortFormControl = new FormControl('');
-
-        this.sortFormControl.valueChanges.subscribe(
-            (sortValue) => {
-                this.sort = sortValue;
-
-                this.sortArray = [{
-                    orderBy: this.sort,
-                    direction: this.sortDirection
-                }];
-            }
-        );
-        this.sortDirectionFormControl = new FormControl('');
-
-        this.sortDirectionFormControl.valueChanges.subscribe(
-            (sortDirectionValue) => {
-                this.sortDirection = sortDirectionValue;
-
-                this.sortArray = [{
-                    orderBy: this.sort,
-                    direction: this.sortDirection
-                }];
-            }
-        );
-    }
+    ngOnInit() {}
 
     onAppClick(appClicked: any) {
         this.currentAppName = appClicked.name;
@@ -100,12 +71,35 @@ export class ProcessListCloudExampleComponent implements OnInit {
     }
 
     onFilterSelected(filter) {
-        this.status = filter.query.state || '';
-        this.sort = filter.query.sort;
-        this.sortDirection = filter.query.order;
-        this.filterName = filter.name;
-        this.sortDirectionFormControl.setValue(this.sortDirection);
-        this.sortFormControl.setValue(this.sort);
         this.currentFilter = new ProcessFilterRepresentationModel(filter);
+    }
+
+    onFilterChange(query: any) {
+        this.editedQuery = Object.assign({}, query);
+        this.sortArray = [new ProcessListCloudSortingModel({ orderBy: this.editedQuery.sort, direction: this.editedQuery.order })];
+    }
+
+    onEditActions(event: any) {
+        if (event.actionType === EditProcessFilterCloudComponent.ACTION_SAVE) {
+            this.save(event.id);
+        } else if (event.actionType === EditProcessFilterCloudComponent.ACTION_SAVE_AS) {
+            this.saveAs(event.id);
+        } else if (event.actionType === EditProcessFilterCloudComponent.ACTION_DELETE) {
+            this.deleteFilter();
+        }
+    }
+
+    saveAs(filterId) {
+        this.processFiltersCloud.filterParam = <any> {id : filterId};
+        this.processFiltersCloud.getFilters(this.currentAppName);
+    }
+
+    save(filterId) {
+        this.processFiltersCloud.filterParam = <any> {id : filterId};
+        this.processFiltersCloud.getFilters(this.currentAppName);
+    }
+
+    deleteFilter() {
+        this.processFiltersCloud.getFilters(this.currentAppName);
     }
 }
