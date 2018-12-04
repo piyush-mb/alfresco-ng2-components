@@ -60,7 +60,8 @@ describe('Task filters cloud', () => {
 
         it('[C290009] Should display default filters and created task', async() => {
             await tasksService.init(user, password);
-            await tasksService.createStandaloneTask(newTask, simpleApp);
+            let task =  await tasksService.createStandaloneTask(newTask, simpleApp);
+            await tasksService.claimTask(task.entry.id, simpleApp);
 
             tasksCloudDemoPage.completedTasksFilter().clickTaskFilter();
             expect(tasksCloudDemoPage.checkActiveFilterActive()).toBe('Completed Tasks');
@@ -69,10 +70,10 @@ describe('Task filters cloud', () => {
             tasksCloudDemoPage.myTasksFilter().clickTaskFilter();
             expect(tasksCloudDemoPage.checkActiveFilterActive()).toBe('My Tasks');
 
-            tasksCloudDemoPage.customFilter().clickCustomFilters();
-            tasksCloudDemoPage.statusFilter().clickFilterDropDown();
+            // tasksCloudDemoPage.customFilter().clickCustomFilters();
+            // tasksCloudDemoPage.statusFilter().clickFilterDropDown();
 
-            tasksCloudDemoPage.statusOption('CREATED').setOption();
+            // tasksCloudDemoPage.statusOption('CREATED').setOption();
 
             tasksCloudDemoPage.taskListCloudComponent().getDataTable().checkContentIsDisplayed(newTask);
         });
