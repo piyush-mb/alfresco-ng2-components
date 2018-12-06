@@ -17,7 +17,7 @@
 
 import { ApiService } from './apiservice';
 
-export class Tasks {
+export class ProcessInstances {
 
     api: ApiService = new ApiService();
 
@@ -28,32 +28,21 @@ export class Tasks {
         await this.api.login(username, password);
     }
 
-    async createStandaloneTask(taskName, appName, options?) {
-        const path = '/' + appName + '-rb/v1/tasks';
+    async createProcessInstance(processDefKey, appName) {
+        const path = '/' + appName + '-rb/v1/process-instances';
         const method = 'POST';
 
         const queryParams = {}, postBody = {
-            'name': taskName,
-            'payloadType': 'CreateTaskPayload',
-            ...options
+            'processDefinitionKey': processDefKey,
+            'payloadType': 'StartProcessPayload'
         };
 
         const data = await this.api.performBpmOperation(path, method, queryParams, postBody);
         return data;
     }
 
-    async completeTask(taskId, appName) {
-        const path = '/' + appName + '-rb/v1/tasks/' + taskId + '/complete';
-        const method = 'POST';
-
-        const queryParams = {}, postBody = {'payloadType': 'CompleteTaskPayload'};
-
-        const data = await this.api.performBpmOperation(path, method, queryParams, postBody);
-        return data;
-    }
-
-    async claimTask(taskId, appName) {
-        const path = '/' + appName + '-rb/v1/tasks/' + taskId + '/claim';
+    async suspendProcessInstance(processInstanceId, appName) {
+        const path = '/' + appName + '-rb/v1/process-instances/' + processInstanceId + '/suspend';
         const method = 'POST';
 
         const queryParams = {}, postBody = {};
@@ -62,8 +51,8 @@ export class Tasks {
         return data;
     }
 
-    async deleteTask(taskId, appName) {
-        const path = '/' + appName + '-rb/v1/tasks/' + taskId;
+    async deleteProcessInstance(processInstanceId, appName) {
+        const path = '/' + appName + '-rb/v1/process-instances/' + processInstanceId;
         const method = 'DELETE';
 
         const queryParams = {}, postBody = {};
@@ -71,5 +60,4 @@ export class Tasks {
         const data = await this.api.performBpmOperation(path, method, queryParams, postBody);
         return data;
     }
-
 }
